@@ -51,6 +51,7 @@ choco install -y IIS-ASPNET --source WindowsFeatures
 choco install -y git --package-parameters="'/GitAndUnixToolsOnPath /WindowsTerminal'"
 choco install -y 7zip.install
 choco install -y microsoft-windows-terminal
+choco install -y urlrewrite
 refreshenv # Refresh to bring in any installed env variables (eg. git)
 
 # Install Software
@@ -61,8 +62,8 @@ choco install visualstudio2022community -y --package-parameters "--add Microsoft
 refreshenv
 choco install -y resharper
 choco install -y sql-server-express
+choco install -y sql-server-management-studio
 choco install -y gitkraken
-choco install -y urlrewrite
 refreshenv
 
 # Bootstrap Repos/Projects
