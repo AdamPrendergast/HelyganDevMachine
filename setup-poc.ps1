@@ -82,7 +82,7 @@ Set-WinSystemLocale en-GB
 #Set the timezone
 Set-TimeZone "GMT Standard Time"
 # Set Network Discovery to 'No'
-netsh advfirewall firewall set rule group=”Network Discovery” new enable=Yes
+netsh advfirewall firewall set rule group=”Network Discovery” new enable=No
 
 #--- reenabling critial items ---
 Enable-UAC
