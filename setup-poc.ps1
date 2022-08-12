@@ -48,7 +48,7 @@ choco install -y IIS-ASPNET --source WindowsFeatures
 # Install Utilities
 choco install -y git --package-parameters="'/GitAndUnixToolsOnPath /WindowsTerminal'"
 choco install -y 7zip.install
-choco install microsoft-windows-terminal
+choco install -y microsoft-windows-terminal
 refreshenv # Refresh to bring in any installed env variables (eg. git)
 
 # Install Software
@@ -81,7 +81,8 @@ Set-WinUserLanguageList $1 -force
 Set-WinSystemLocale en-GB
 #Set the timezone
 Set-TimeZone "GMT Standard Time"
-
+# Set Network Discovery to 'No'
+netsh advfirewall firewall set rule group=”Network Discovery” new enable=Yes
 
 #--- reenabling critial items ---
 Enable-UAC
