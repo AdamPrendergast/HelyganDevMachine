@@ -16,6 +16,8 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 choco install -y boxstarter
 refreshenv
 
+Disable-UAC
+
 #--- Enable developer mode on the system ---
 Set-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\AppModelUnlock -Name AllowDevelopmentWithoutDevLicense -Value 1
 
