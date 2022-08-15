@@ -55,7 +55,7 @@ let developmentEnvironment = vm {
     vm_size Vm.Standard_D4ds_v4
     operating_system Vm.WindowsServer_2019Datacenter
     os_disk 128 Vm.StandardSSD_LRS
-    add_ssd_disk 128
+    add_ssd_disk 32
     custom_script "powershell.exe -ExecutionPolicy Unrestricted -File remote-bootstrap-setup.ps1"
     custom_script_files [ 
         "https://raw.githubusercontent.com/AdamPrendergast/HelyganDevMachine/main/remote-bootstrap-setup.ps1"

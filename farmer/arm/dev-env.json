@@ -1,0 +1,200 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "outputs": {},
+  "parameters": {
+    "password-for-HD-Dev-VM": {
+      "type": "securestring"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2020-06-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', 'HD-Dev-VM-nic')]"
+      ],
+      "location": "ukwest",
+      "name": "HD-Dev-VM",
+      "properties": {
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": false
+          }
+        },
+        "hardwareProfile": {
+          "vmSize": "Standard_D4ds_v4"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'HD-Dev-VM-nic')]"
+            }
+          ]
+        },
+        "osProfile": {
+          "adminPassword": "[parameters('password-for-HD-Dev-VM')]",
+          "adminUsername": "helygan",
+          "computerName": "HD-Dev-VM"
+        },
+        "priority": "Regular",
+        "storageProfile": {
+          "dataDisks": [
+            {
+              "createOption": "Empty",
+              "diskSizeGB": 32,
+              "lun": 0,
+              "managedDisk": {
+                "storageAccountType": "StandardSSD_LRS"
+              },
+              "name": "hd-dev-vm-datadisk-0"
+            }
+          ],
+          "imageReference": {
+            "offer": "WindowsServer",
+            "publisher": "MicrosoftWindowsServer",
+            "sku": "2022-Datacenter",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage",
+            "diskSizeGB": 128,
+            "managedDisk": {
+              "storageAccountType": "StandardSSD_LRS"
+            },
+            "name": "hd-dev-vm-osdisk"
+          }
+        }
+      },
+      "tags": {},
+      "type": "Microsoft.Compute/virtualMachines"
+    },
+    {
+      "apiVersion": "2018-11-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', 'HD-Dev-VM-vnet')]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'HD-Dev-VM-ip')]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', 'HD-Dev-VMNSG')]"
+      ],
+      "location": "ukwest",
+      "name": "HD-Dev-VM-nic",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'HD-Dev-VM-ip')]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'HD-Dev-VM-vnet', 'HD-Dev-VM-subnet')]"
+              }
+            }
+          }
+        ],
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'HD-Dev-VMNSG')]"
+        }
+      },
+      "tags": {},
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+    {
+      "apiVersion": "2020-07-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', 'HD-Dev-VMNSG')]"
+      ],
+      "location": "ukwest",
+      "name": "HD-Dev-VM-vnet",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "HD-Dev-VM-subnet",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24",
+              "delegations": [],
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'HD-Dev-VMNSG')]"
+              }
+            }
+          }
+        ]
+      },
+      "tags": {},
+      "type": "Microsoft.Network/virtualNetworks"
+    },
+    {
+      "apiVersion": "2018-11-01",
+      "location": "ukwest",
+      "name": "HD-Dev-VM-ip",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      },
+      "sku": {
+        "name": "Basic"
+      },
+      "tags": {},
+      "type": "Microsoft.Network/publicIPAddresses"
+    },
+    {
+      "apiVersion": "2019-12-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', 'HD-Dev-VM')]"
+      ],
+      "location": "ukwest",
+      "name": "HD-Dev-VM/HD-Dev-VM-custom-script",
+      "properties": {
+        "autoUpgradeMinorVersion": true,
+        "protectedSettings": {
+          "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File remote-bootstrap-setup.ps1"
+        },
+        "publisher": "Microsoft.Compute",
+        "settings": {
+          "fileUris": [
+            "https://raw.githubusercontent.com/AdamPrendergast/HelyganDevMachine/main/remote-bootstrap-setup.ps1"
+          ]
+        },
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.10"
+      },
+      "tags": {},
+      "type": "Microsoft.Compute/virtualMachines/extensions"
+    },
+    {
+      "apiVersion": "2020-04-01",
+      "location": "ukwest",
+      "name": "HD-Dev-VMNSG",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "Helygan_Access_Ip",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationAddressPrefixes": [],
+              "destinationPortRanges": [
+                "3389"
+              ],
+              "direction": "Inbound",
+              "priority": 100,
+              "protocol": "Tcp",
+              "sourceAddressPrefixes": [
+                "86.11.240.167"
+              ],
+              "sourcePortRange": "*",
+              "sourcePortRanges": []
+            },
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules"
+          }
+        ]
+      },
+      "tags": {},
+      "type": "Microsoft.Network/networkSecurityGroups"
+    }
+  ]
+}

@@ -22,3 +22,6 @@ az deployment group create --name ScriptedDeployment `
 # Downgrade Machine to Standard_B2s
 
 # Restart VM
+
+### Reference
+# https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-cli
