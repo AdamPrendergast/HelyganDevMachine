@@ -41,55 +41,55 @@ Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\
 Get-ScheduledTask -TaskName ServerManager | Disable-ScheduledTask -Verbose
 
 # Install Windows Features
-choco install -y IIS-WebServerRole --source WindowsFeatures
-choco install -y IIS-ISAPIFilter --source WindowsFeatures
-choco install -y IIS-ISAPIExtensions --source WindowsFeatures
-choco install -y IIS-NetFxExtensibility --source WindowsFeatures
-choco install -y IIS-ASPNET --source WindowsFeatures
+# choco install -y IIS-WebServerRole --source WindowsFeatures
+# choco install -y IIS-ISAPIFilter --source WindowsFeatures
+# choco install -y IIS-ISAPIExtensions --source WindowsFeatures
+# choco install -y IIS-NetFxExtensibility --source WindowsFeatures
+# choco install -y IIS-ASPNET --source WindowsFeatures
 
-# Install Utilities
-choco install -y git --package-parameters="'/GitAndUnixToolsOnPath /WindowsTerminal'"
-choco install -y 7zip.install
-choco install -y microsoft-windows-terminal
-choco install -y urlrewrite
-refreshenv # Refresh to bring in any installed env variables (eg. git)
+# # Install Utilities
+# choco install -y git --package-parameters="'/GitAndUnixToolsOnPath /WindowsTerminal'"
+# choco install -y 7zip.install
+# choco install -y microsoft-windows-terminal
+# choco install -y urlrewrite
+# refreshenv # Refresh to bring in any installed env variables (eg. git)
 
-# Install Software
-choco install -y googlechrome
-choco install -y firefox
-choco install -y vscode
-choco install visualstudio2022community -y --package-parameters "--add Microsoft.VisualStudio.Workload.Azure;includeRecommended;includeOptional --add Microsoft.VisualStudio.Workload.NetWeb;includeRecommended;includeOptional --add Microsoft.VisualStudio.Workload.Node;includeRecommended;includeOptional"
-refreshenv
-choco install -y resharper
-choco install -y sql-server-express
-choco install -y sql-server-management-studio
-choco install -y gitkraken
-refreshenv
+# # Install Software
+# choco install -y googlechrome
+# choco install -y firefox
+# choco install -y vscode
+# choco install visualstudio2022community -y --package-parameters "--add Microsoft.VisualStudio.Workload.Azure;includeRecommended;includeOptional --add Microsoft.VisualStudio.Workload.NetWeb;includeRecommended;includeOptional --add Microsoft.VisualStudio.Workload.Node;includeRecommended;includeOptional"
+# refreshenv
+# choco install -y resharper
+# choco install -y sql-server-express
+# choco install -y sql-server-management-studio
+# choco install -y gitkraken
+# refreshenv
 
-# Bootstrap Repos/Projects
-cd C:/
-mkdir projects
-cd projects
-git clone https://github.com/AdamPrendergast/HelyganDevMachine.git
+# # Bootstrap Repos/Projects
+# cd C:/
+# mkdir projects
+# cd projects
+# git clone https://github.com/AdamPrendergast/HelyganDevMachine.git
 
 
-#--- Final Server Housekeeping ---
-#Set home location to United Kingdom
-Set-WinHomeLocation 0xf2
-#Override language list with just English GB
-$1 = New-WinUserLanguageList en-GB
-$1[0].Handwriting = 1
-Set-WinUserLanguageList $1 -force
-#Set system local
-Set-WinSystemLocale en-GB
-#Set the timezone
-Set-TimeZone "GMT Standard Time"
-# Set Network Discovery to 'No'
-netsh advfirewall firewall set rule group=”Network Discovery” new enable=No
+# #--- Final Server Housekeeping ---
+# #Set home location to United Kingdom
+# Set-WinHomeLocation 0xf2
+# #Override language list with just English GB
+# $1 = New-WinUserLanguageList en-GB
+# $1[0].Handwriting = 1
+# Set-WinUserLanguageList $1 -force
+# #Set system local
+# Set-WinSystemLocale en-GB
+# #Set the timezone
+# Set-TimeZone "GMT Standard Time"
+# # Set Network Discovery to 'No'
+# netsh advfirewall firewall set rule group=”Network Discovery” new enable=No
 
-#--- reenabling critial items ---
-Enable-UAC
+# #--- reenabling critial items ---
+# Enable-UAC
 
-# Install-WindowsUpdate -AcceptEula 
+# # Install-WindowsUpdate -AcceptEula 
 
-Restart-Computer
+# Restart-Computer
