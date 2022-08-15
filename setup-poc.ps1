@@ -41,16 +41,16 @@ Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\
 Get-ScheduledTask -TaskName ServerManager | Disable-ScheduledTask -Verbose
 
 # Install Windows Features
-# choco install -y IIS-WebServerRole --source WindowsFeatures
-# choco install -y IIS-ISAPIFilter --source WindowsFeatures
-# choco install -y IIS-ISAPIExtensions --source WindowsFeatures
-# choco install -y IIS-NetFxExtensibility --source WindowsFeatures
-# choco install -y IIS-ASPNET --source WindowsFeatures
+choco install -y IIS-WebServerRole --source WindowsFeatures
+choco install -y IIS-ISAPIFilter --source WindowsFeatures
+choco install -y IIS-ISAPIExtensions --source WindowsFeatures
+choco install -y IIS-NetFxExtensibility --source WindowsFeatures
+choco install -y IIS-ASPNET --source WindowsFeatures
 
 # # Install Utilities
+# choco install -y microsoft-windows-terminal
 # choco install -y git --package-parameters="'/GitAndUnixToolsOnPath /WindowsTerminal'"
 # choco install -y 7zip.install
-# choco install -y microsoft-windows-terminal
 # choco install -y urlrewrite
 # refreshenv # Refresh to bring in any installed env variables (eg. git)
 
