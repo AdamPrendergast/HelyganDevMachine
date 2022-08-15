@@ -44,7 +44,7 @@
               "diskSizeGB": 32,
               "lun": 0,
               "managedDisk": {
-                "storageAccountType": "StandardSSD_LRS"
+                "storageAccountType": "Standard_LRS"
               },
               "name": "hd-dev-vm-datadisk-0"
             }
@@ -59,7 +59,7 @@
             "createOption": "FromImage",
             "diskSizeGB": 128,
             "managedDisk": {
-              "storageAccountType": "StandardSSD_LRS"
+              "storageAccountType": "Premium_LRS"
             },
             "name": "hd-dev-vm-osdisk"
           }
